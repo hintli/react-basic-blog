@@ -2,7 +2,8 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 // const bodyParser = require("body-parser")
-// const cookieParser = require("cookie-parser")
+const cookieParser = require("cookie-parser")
+const { auth } = require("./middleware/auth"); 
 const dotenv = require("dotenv")
 dotenv.config()
 
@@ -27,8 +28,23 @@ const {User} = require("./models/user")
 // app.use(bodyParser.json());
 app.use(express.json())
 
-// app.use(cookieParser())
+app.use(cookieParser())
 
+
+
+
+app.get("/api/user/auth", auth,  (req,res) =>{
+    res.status(200).json({
+      _id:req._id,
+      isAuth: true,
+      email:req.user.email,
+      name: req.user.name,
+      lastname:req.user.lastname,
+      role: req.user.role
+    })
+  })
+  
+  
 
 
 app.post("/api/users/register",(req,res) => {
